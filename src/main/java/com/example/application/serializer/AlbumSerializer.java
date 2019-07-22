@@ -14,6 +14,7 @@ public class AlbumSerializer extends StdSerializer<Album> {
     public AlbumSerializer(Class<Album> t) {
         super(t);
     }
+
     public AlbumSerializer() {
         this(null);
     }
