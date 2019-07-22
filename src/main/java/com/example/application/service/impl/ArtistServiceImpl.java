@@ -22,7 +22,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist getOne(Long id) {
+    public Artist getOne(Integer id) {
         return artistRepository.getOne(id);
     }
 

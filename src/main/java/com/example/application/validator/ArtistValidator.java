@@ -26,12 +26,6 @@ public class ArtistValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        Artist artist=(Artist)o;
-        Calendar now = Calendar.getInstance();
-        int year = now.get(Calendar.YEAR);
-        if(artist.getStartActivityYear()<1900 || artist.getEndActivityYear()>year){
-            errors.rejectValue("yearValidate", "Incorrect year interval");
-        }
 
     }
 }

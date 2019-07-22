@@ -1,8 +1,12 @@
 package com.example.application.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.omg.CORBA.INTERNAL;
+
+
+import com.example.application.deserializer.ArtistDeserializer;
+import com.example.application.serializer.ArtistsSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,13 +14,15 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
+@JsonSerialize(using = ArtistsSerializer.class)
+@JsonDeserialize(using = ArtistDeserializer.class)
 @Entity
 @Table
 public class Artist {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotBlank(message = "Name is required")
     @Size(min=5,max=200,message = "Name should contain from 5 to 200 symbols")
@@ -25,19 +31,27 @@ public class Artist {
     @Size(max=2000,message = "Notes should contain less than 2000 symbols")
     private String notes;
 
-     private Integer startActivityYear;
+     private int start_activity_year;
 
-     private Integer endActivityYear;
+     private int end_activity_year;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "artist_id")
+     @ManyToMany
+     @JoinTable(name = "artist_genre",
+            joinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id")
+    )
     private Set<Genre> genres;
 
-    public Long getId() {
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+    private Set<Album> albums;
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -65,20 +79,47 @@ public class Artist {
         this.name = name;
     }
 
-    public Integer getStartActivityYear() {
-        return startActivityYear;
+    public Integer getStart_activity_year() {
+        return start_activity_year;
     }
 
-    public void setStartActivityYear(Integer startActivityYear) {
-        this.startActivityYear = startActivityYear;
+    public void setStart_activity_year(int start_activity_year) {
+        this.start_activity_year = start_activity_year;
     }
 
-    public Integer getEndActivityYear() {
-        return endActivityYear;
+    public Integer getEnd_activity_year() {
+        return end_activity_year;
     }
 
-    public void setEndActivityYear(Integer endActivityYear) {
-        this.endActivityYear = endActivityYear;
+    public void setEnd_activity_year(int end_activity_year) {
+        this.end_activity_year = end_activity_year;
+    }
+
+    public Artist() {
+    }
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(Set<Album> albums) {
+        this.albums = albums;
+    }
+
+    public Artist(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, int start_activity_year, int end_activity_year, Set<Genre> genres) {
+
+        this.name = name;
+        this.notes = notes;
+        this.start_activity_year = start_activity_year;
+        this.end_activity_year = end_activity_year;
+        this.genres = genres;
+    }
+
+    public Artist(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, int start_activity_year, int end_activity_year) {
+        this.name = name;
+        this.notes = notes;
+        this.start_activity_year = start_activity_year;
+        this.end_activity_year = end_activity_year;
     }
 
     @Override
@@ -87,8 +128,8 @@ public class Artist {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", notes='" + notes + '\'' +
-                ", startActivityYear=" + startActivityYear +
-                ", endActivityYear=" + endActivityYear +
+                ", start_activity_year=" + start_activity_year +
+                ", end_activity_year=" + end_activity_year +
                 ", genres=" + genres +
                 '}';
     }

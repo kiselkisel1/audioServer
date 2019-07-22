@@ -38,7 +38,7 @@ public class MainController {
 //    }
 
     @GetMapping("{id}")
-    public ResponseEntity<Artist> getUsersById(@PathVariable Long id)
+    public ResponseEntity<Artist> getUsersById(@PathVariable Integer id)
             throws ResourceNotFoundException {
        Artist artist=artistRepository.findById(id)
                          .orElseThrow(() -> new ResourceNotFoundException("ARTIST_DOES_NOT_EXIST"));
