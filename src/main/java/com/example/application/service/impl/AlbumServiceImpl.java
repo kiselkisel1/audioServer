@@ -3,11 +3,10 @@ package com.example.application.service.impl;
 import com.example.application.exceptions.ResourceNotFoundException;
 import com.example.application.model.Album;
 import com.example.application.repository.AlbumRepository;
-import com.example.application.repository.ArtistRepository;
-import com.example.application.repository.GenreRepository;
 import com.example.application.service.AlbumService;
 import com.example.application.service.ArtistService;
- import org.springframework.beans.factory.annotation.Autowired;
+import com.example.application.service.GenreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +16,8 @@ import java.util.List;
 @Transactional
 public class AlbumServiceImpl implements AlbumService {
 
-    @Autowired
-    AlbumRepository albumRepository;
-
-    @Autowired
-    ArtistService artistService;
-
+   @Autowired
+   AlbumRepository albumRepository;
 
 
     @Override
@@ -39,7 +34,6 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Album save(Album album) {
 
-
         return albumRepository.save(album);
     }
 
@@ -47,6 +41,5 @@ public class AlbumServiceImpl implements AlbumService {
     public void delete(Album album) {
         albumRepository.delete(album);
     }
-
 
 }

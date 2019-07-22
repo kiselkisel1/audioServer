@@ -1,17 +1,25 @@
 package com.example.application.service.impl;
 
+import com.example.application.exceptions.ResourceNotFoundException;
 import com.example.application.model.Artist;
 import com.example.application.repository.ArtistRepository;
+import com.example.application.service.AlbumService;
 import com.example.application.service.ArtistService;
+import com.example.application.service.GenreService;
+import com.example.application.utils.CurrentYear;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class ArtistServiceImpl implements ArtistService {
+
+    private static final Logger logger = LoggerFactory.getLogger(Artist.class);
 
     @Autowired
     ArtistRepository artistRepository;
@@ -22,17 +30,14 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist getOne(Integer id) {
-        return artistRepository.getOne(id);
+    public Artist getOne(Integer id){
+        return artistRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ARTIST_DOES_NOT_EXIST"));
     }
 
     @Override
-    public Artist add(Artist artist) {
-        return artistRepository.save(artist);
-    }
+    public Artist save(Artist artist) {
 
-    @Override
-    public Artist update(Artist artist) {
         return artistRepository.save(artist);
     }
 
@@ -40,4 +45,5 @@ public class ArtistServiceImpl implements ArtistService {
     public void delete(Artist artist) {
         artistRepository.delete(artist);
     }
+
 }

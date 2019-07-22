@@ -5,29 +5,22 @@ import com.example.application.model.Genre;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class ArtistsSerializer extends StdSerializer<Artist> {
+public class ArtistSerializer extends StdSerializer<Artist> {
 
     private static final Logger logger = LoggerFactory.getLogger(Artist.class);
 
-    public ArtistsSerializer(Class<Artist> t) {
+    public ArtistSerializer(Class<Artist> t) {
         super(t);
     }
 
-    public ArtistsSerializer() {
+    public ArtistSerializer() {
        this(null);
     }
-
-
-
     @Override
     public void serialize(Artist artist, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
 

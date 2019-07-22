@@ -3,18 +3,16 @@ package com.example.application.model;
 
 
 import com.example.application.deserializer.ArtistDeserializer;
-import com.example.application.serializer.ArtistsSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.application.serializer.ArtistSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Date;
 import java.util.Set;
 
-@JsonSerialize(using = ArtistsSerializer.class)
+@JsonSerialize(using = ArtistSerializer.class)
 @JsonDeserialize(using = ArtistDeserializer.class)
 @Entity
 @Table
@@ -36,15 +34,15 @@ public class Artist {
      private int end_activity_year;
 
      @ManyToMany
-     @JoinTable(name = "artist_genre",
+     @JoinTable(name = "handbook",
             joinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id")
     )
     private Set<Genre> genres;
 
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
-    private Set<Album> albums;
+//
+//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+//    private Set<Album> albums;
 
 
     public Integer getId() {
@@ -98,13 +96,7 @@ public class Artist {
     public Artist() {
     }
 
-    public Set<Album> getAlbums() {
-        return albums;
-    }
 
-    public void setAlbums(Set<Album> albums) {
-        this.albums = albums;
-    }
 
     public Artist(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, int start_activity_year, int end_activity_year, Set<Genre> genres) {
 

@@ -8,7 +8,7 @@ public interface ArtistService {
 
     List<Artist> getAll();
     Artist getOne(Integer id);
-    Artist add(Artist artist);
-    Artist update(Artist artist);
+    Artist save(Artist artist);
     void delete(Artist artist);
+
 }

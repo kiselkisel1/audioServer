@@ -1,7 +1,6 @@
 package com.example.application.service;
 
 import com.example.application.model.Album;
-import com.example.application.model.Artist;
 
 import java.util.List;
 

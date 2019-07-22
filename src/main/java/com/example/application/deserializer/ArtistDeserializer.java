@@ -3,6 +3,7 @@ package com.example.application.deserializer;
 import com.example.application.model.Artist;
 import com.example.application.model.Genre;
 import com.example.application.repository.GenreRepository;
+import com.example.application.service.GenreService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -23,7 +24,7 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
     private static final Logger logger = LoggerFactory.getLogger(Artist.class);
 
     @Autowired
-    GenreRepository genreRepository;
+    GenreService genreService;
 
     protected ArtistDeserializer(Class<?> vc) {
         super(vc);
@@ -42,12 +43,12 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
         String name = node.get("name").asText();
         String notes = node.get("notes").asText();
         int start_activity_year =  node.get("start_activity_year").asInt();
-        int end_activity_year = (Integer) ((IntNode) node.get("end_activity_year")).numberValue();
+        int end_activity_year = node.get("end_activity_year").asInt();
  //        JsonNode js=node.get("genres");
         if(node.get("genres").isArray()){
             for (final JsonNode objNode : node.get("genres")) {
                 logger.debug("objNode="+objNode);
-                Genre genre=genreRepository.getOne(objNode.asInt());
+                Genre genre=genreService.getOne(objNode.asInt());
                 logger.debug("genre"+genre.toString());
                 genres.add(genre);
             }
