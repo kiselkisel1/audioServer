@@ -16,9 +16,17 @@ public class Genre {
     @NotBlank(message = "Genre is required")
     private String name;
 
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres")
-//    private Set<Artist> artists;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres")
+    private Set<Artist> artists;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres")
+    private Set<Album> albums;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "genres")
+    private Set<Song> songs;
 
     public Integer getId() {
         return id;
@@ -36,7 +44,29 @@ public class Genre {
         this.name = name;
     }
 
+    public Set<Artist> getArtists() {
+        return artists;
+    }
 
+    public void setArtists(Set<Artist> artists) {
+        this.artists = artists;
+    }
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(Set<Album> albums) {
+        this.albums = albums;
+    }
+
+    public Set<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(Set<Song> songs) {
+        this.songs = songs;
+    }
 
     public Genre() {
     }

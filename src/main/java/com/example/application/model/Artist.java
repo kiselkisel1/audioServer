@@ -4,6 +4,7 @@ package com.example.application.model;
 
 import com.example.application.deserializer.ArtistDeserializer;
 import com.example.application.serializer.ArtistSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -40,9 +41,12 @@ public class Artist {
     )
     private Set<Genre> genres;
 
-//
-//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
-//    private Set<Album> albums;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+    private Set<Song> songs;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artists")
+    private Set<Album> albums;
 
 
     public Integer getId() {
@@ -96,7 +100,21 @@ public class Artist {
     public Artist() {
     }
 
+    public Set<Song> getSongs() {
+        return songs;
+    }
 
+    public void setSongs(Set<Song> songs) {
+        this.songs = songs;
+    }
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(Set<Album> albums) {
+        this.albums = albums;
+    }
 
     public Artist(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, int start_activity_year, int end_activity_year, Set<Genre> genres) {
 

@@ -11,6 +11,13 @@ create table artist (
   name VARCHAR(100) NOT NULL
 );
 
+ create table song (
+  id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  year  INT NOT NULL ,
+  comment VARCHAR(2000)
+  );
+
  create TABLE artist_genre (
   artist_id INT NOT NULL,
   genre_id INT NOT NULL,
@@ -53,12 +60,51 @@ insert into genre values (4, 'genre4');
 insert into artist_genre values (2, 3);
 
 insert into album values (1,'album1',2010,'album2');
+insert into album values (1,'album1',2010,'album2');
+insert into album values (1,'album12',1980,'asdasd');
+insert into album values (1,'album3',2012,'aasd');
+
+insert into song values(1,'sfsdfs',1900,'yeryy');
+insert into song values(2,'qwes',1900,'yeryy');
+insert into song values(3,'AAAfs',1900,'yeryy');
 
 select * from artist_genre ;
-
 
 
 select * from genre ;
 
 insert into album_artist values (1, 3);
 
+ use audioservice;
+ create table artist (
+  id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  notes VARCHAR(2000),
+  start_activity_year  INT NOT NULL ,
+  end_activity_year  INT
+);
+ create TABLE genre (
+  id   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL
+);
+ create table album (
+  id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  year  INT NOT NULL ,
+  notes VARCHAR(2000)
+  );
+
+ create table song (
+  id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  year  INT NOT NULL ,
+  comment VARCHAR(2000)
+  );
+
+  create table handbook (
+  id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  artist_id int,
+  genre_id int,
+   album_id intalbum,
+   song_id int
+  );

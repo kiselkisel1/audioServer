@@ -22,6 +22,7 @@ public class AlbumDeserializer extends StdDeserializer<Album> {
     protected AlbumDeserializer(Class<?> vc) {
         super(vc);
     }
+
     protected AlbumDeserializer() {
         this(null);
     }

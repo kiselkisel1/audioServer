@@ -10,8 +10,12 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 public class AlbumSerializer extends StdSerializer<Album> {
-    protected AlbumSerializer(Class<Album> t) {
+
+    public AlbumSerializer(Class<Album> t) {
         super(t);
+    }
+    public AlbumSerializer() {
+        this(null);
     }
 
     @Override
