@@ -1,41 +1,43 @@
 package com.example.application.deserializer;
 
-import com.example.application.model.Album;
 import com.example.application.model.Artist;
-import com.example.application.service.ArtistService;
+import com.example.application.model.Genre;
+import com.example.application.model.Song;
+import com.example.application.service.AlbumService;
+import com.example.application.service.GenreService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
-public class AlbumDeserializer extends StdDeserializer<Album> {
+public class SongDeserializer extends StdDeserializer<Song> {
 
     @Autowired
-    ArtistService artistService;
+    AlbumService albumService;
 
-    protected AlbumDeserializer(Class<?> vc) {
+    public SongDeserializer(Class<?> vc) {
         super(vc);
     }
-
-    protected AlbumDeserializer() {
+    protected SongDeserializer() {
         this(null);
     }
 
     @Override
-    public Album deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public Song deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JsonProcessingException {
+
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         String name = node.get("name").asText();
         int year =  node.get("year").asInt();
-        String notes = node.get("notes").asText();
-        Artist artist=artistService.getOne(node.get("artist").asInt());
-        return new Album(name,year,notes,artist);
+        String comment = node.get("comment").asText();
+
+        return new Song(name,year,comment, albumService.getOne(node.get("album").asInt()));
     }
 }

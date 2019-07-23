@@ -28,12 +28,8 @@ public class AlbumSerializer extends StdSerializer<Album> {
         jsonGenerator.writeNumberField("year", album.getYear());
         jsonGenerator.writeStringField("notes", album.getNotes());
 
-        jsonGenerator.writeFieldName("artists");
-        jsonGenerator.writeStartArray();
-        for(Artist artist:album.getArtists()){
-             jsonGenerator.writeNumber(artist.getId());
-        }
-        jsonGenerator.writeEndArray();
+        jsonGenerator.writeNumberField("artist",album.getArtist().getId());
+        jsonGenerator.writeNumberField("genre",album.getArtist().getGenre().getId());
         jsonGenerator.writeEndObject();
     }
 }

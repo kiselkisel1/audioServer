@@ -21,6 +21,7 @@ public class ArtistSerializer extends StdSerializer<Artist> {
     public ArtistSerializer() {
        this(null);
     }
+
     @Override
     public void serialize(Artist artist, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
 
@@ -30,13 +31,9 @@ public class ArtistSerializer extends StdSerializer<Artist> {
         jsonGenerator.writeStringField("notes", artist.getNotes());
         jsonGenerator.writeNumberField("start_activity_year", artist.getStart_activity_year());
         jsonGenerator.writeNumberField("end_activity_year", artist.getEnd_activity_year());
-        jsonGenerator.writeFieldName("genres");
-        jsonGenerator.writeStartArray();
-        for(Genre genre:artist.getGenres()){
-            logger.debug("inside write number");
-            jsonGenerator.writeNumber(genre.getId());
-        }
-         jsonGenerator.writeEndArray();
+
+        jsonGenerator.writeNumberField("genre",artist.getGenre().getId());
+
         jsonGenerator.writeEndObject();
     }
 }

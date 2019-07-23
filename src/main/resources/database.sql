@@ -17,28 +17,13 @@ create table artist (
   year  INT NOT NULL ,
   comment VARCHAR(2000)
   );
-
- create TABLE artist_genre (
-  artist_id INT NOT NULL,
-  genre_id INT NOT NULL,
-
-  FOREIGN KEY (artist_id) REFERENCES artist (id),
-  FOREIGN KEY (genre_id) REFERENCES genre (id),
-
-  UNIQUE (artist_id, genre_id)
-);
-
-
  create table album (
   id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(200) NOT NULL,
   year  INT NOT NULL ,
   notes VARCHAR(2000)
   );
-
-
-
- create TABLE album_artist (
+  create TABLE album_artist (
   album_id INT NOT NULL,
   artist_id INT NOT NULL,
 
@@ -46,6 +31,34 @@ create table artist (
   FOREIGN KEY (artist_id) REFERENCES artist (id),
 
   UNIQUE (album_id,artist_id)
+);
+ create TABLE artist_song (
+  artist_id INT NOT NULL,
+  song_id INT NOT NULL,
+
+ FOREIGN KEY (artist_id) REFERENCES artist (id),
+ FOREIGN KEY (song_id) REFERENCES song (id),
+
+  UNIQUE (artist_id,song_id)
+);
+ create TABLE album_song (
+  album_id INT NOT NULL,
+  song_id INT NOT NULL,
+
+ FOREIGN KEY (album_id) REFERENCES album (id),
+ FOREIGN KEY (song_id) REFERENCES song (id),
+
+  UNIQUE (album_id,song_id)
+);
+
+ create TABLE song_genre (
+  song_id INT NOT NULL,
+genre_id INT NOT NULL,
+
+ FOREIGN KEY (song_id) REFERENCES song (id),
+ FOREIGN KEY (genre_id) REFERENCES genre (id),
+
+  UNIQUE (song_id,genre_id)
 );
 
 insert into artist values (1,'artist1','note1',2000,2010);

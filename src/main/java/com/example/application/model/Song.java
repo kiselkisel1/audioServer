@@ -1,14 +1,26 @@
 package com.example.application.model;
 
 
+import com.example.application.deserializer.ArtistDeserializer;
+import com.example.application.deserializer.SongDeserializer;
+import com.example.application.serializer.ArtistSerializer;
+import com.example.application.serializer.SongSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Arrays;
-import java.util.Set;
 
+@JsonSerialize(using = SongSerializer.class)
+@JsonDeserialize(using = SongDeserializer.class)
 @Entity
 @Table
+@Data
+@NoArgsConstructor
 public class Song {
 
     @Id
@@ -24,104 +36,14 @@ public class Song {
 
     private String comment;
 
-    @ManyToMany
-    @JoinTable(name = "handbook",
-            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "artist_id", referencedColumnName = "id")
-    )
-    private Set<Artist> artists;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "album_id")
+    private Album album;
 
-    @ManyToMany
-    @JoinTable(name = "handbook",
-            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "album_id", referencedColumnName = "id")
-    )
-    private Set<Album> albums;
-
-    @ManyToMany
-    @JoinTable(name = "handbook",
-            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id")
-    )
-    private Set<Genre> genres;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public Set<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(Set<Artist> artists) {
-        this.artists = artists;
-    }
-
-    public Set<Album> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(Set<Album> albums) {
-        this.albums = albums;
-    }
-
-    public Set<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
-    }
-
-
-    public Song() {
-    }
-
-    public Song(Integer id, @NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, int year, String comment, Integer[] artists, Integer[] albums, Integer[] genres) {
-        this.id = id;
+    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, int year, String comment, Album album) {
         this.name = name;
         this.year = year;
         this.comment = comment;
-
-    }
-
-    @Override
-    public String toString() {
-        return "Song{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", year=" + year +
-                ", comment='" + comment + '\'' +
-
-
-                '}';
+        this.album = album;
     }
 }
