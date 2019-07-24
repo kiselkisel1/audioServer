@@ -1,5 +1,6 @@
 package com.example.application.deserializer;
 
+import com.example.application.model.Album;
 import com.example.application.model.Artist;
 import com.example.application.model.Genre;
 import com.example.application.model.Song;
@@ -38,6 +39,10 @@ public class SongDeserializer extends StdDeserializer<Song> {
         int year =  node.get("year").asInt();
         String comment = node.get("comment").asText();
 
-        return new Song(name,year,comment, albumService.getOne(node.get("album").asInt()));
+        Album album=null;
+        if(node.hasNonNull("genre")){
+            album=albumService.getOne(node.get("album").asInt());
+        }
+        return new Song(name,year,comment, album);
     }
 }

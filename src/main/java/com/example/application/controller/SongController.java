@@ -40,9 +40,13 @@ public class SongController {
         return songService.save(song);
     }
 
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Integer id) {
-        Song song = songService.getOne(id);
-        songService.delete(song);
+    @DeleteMapping
+    public void delete(@RequestParam("id") Integer[] id) {
+
+        for(Integer songId:id){
+            Song song = songService.getOne(songId);
+            songService.delete(song);
+        }
+
     }
 }

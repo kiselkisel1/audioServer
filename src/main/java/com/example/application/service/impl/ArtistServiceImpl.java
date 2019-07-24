@@ -46,4 +46,9 @@ public class ArtistServiceImpl implements ArtistService {
         artistRepository.delete(artist);
     }
 
+    @Override
+    public List<Artist> filter(String name, int year, Integer[] genreId) {
+         return artistRepository.filter(name,year,genreId);
+    }
+
 }

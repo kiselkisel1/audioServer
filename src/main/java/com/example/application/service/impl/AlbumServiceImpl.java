@@ -42,4 +42,9 @@ public class AlbumServiceImpl implements AlbumService {
         albumRepository.delete(album);
     }
 
+    @Override
+    public List<Album> filter(String name, int year, Integer[] artists) {
+        return albumRepository.filter(name,year,artists);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.application.deserializer;
 import com.example.application.model.Album;
 import com.example.application.model.Artist;
 import com.example.application.service.ArtistService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AlbumDeserializer extends StdDeserializer<Album> {
 
     @Autowired
@@ -34,8 +36,15 @@ public class AlbumDeserializer extends StdDeserializer<Album> {
 
         String name = node.get("name").asText();
         int year =  node.get("year").asInt();
-        String notes = node.get("notes").asText();
-        Artist artist=artistService.getOne(node.get("artist").asInt());
+        String notes=null;
+        Artist artist=null;
+        if(node.hasNonNull("notes")  ){
+            notes = node.get("notes").asText();
+        }
+        if(node.hasNonNull("artist")  ){
+            artist=artistService.getOne(node.get("artist").asInt());
+        }
+
         return new Album(name,year,notes,artist);
     }
 }

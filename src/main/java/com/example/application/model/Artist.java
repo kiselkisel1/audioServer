@@ -3,10 +3,7 @@ package com.example.application.model;
 
 import com.example.application.deserializer.ArtistDeserializer;
 import com.example.application.serializer.ArtistSerializer;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
@@ -18,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-@JsonSerialize(using = ArtistSerializer.class)
+ @JsonSerialize(using = ArtistSerializer.class,include=JsonSerialize.Inclusion.NON_NULL)
 @JsonDeserialize(using = ArtistDeserializer.class)
 @Data
 @NoArgsConstructor
@@ -41,11 +38,9 @@ public class Artist {
 
      private int end_activity_year;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
-
-
 
     public Artist(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, int start_activity_year, int end_activity_year, Genre genre) {
         this.name = name;

@@ -17,7 +17,13 @@ public class AlbumController {
     AlbumService albumService;
 
     @GetMapping
-    public List<Album> getAllAlbums() {
+    public List<Album> getAllAlbums(@RequestParam(required=false) String name,
+                                    @RequestParam(required=false) Integer year,
+                                    @RequestParam(required=false) Integer[] artist) {
+
+         if(name!=null && year!=null && artist!=null ){
+             return albumService.filter(name,year,artist);
+        }
         return albumService.getAll();
     }
 
@@ -40,11 +46,14 @@ public class AlbumController {
         return albumService.save(album);
     }
 
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Integer id) {
-        Album album=albumService.getOne(id);
-        albumService.delete(album);
+
+    @DeleteMapping
+    public void delete(@RequestParam("id") Integer[] id) {
+
+        for(Integer albumId:id){
+            Album album=albumService.getOne(albumId);
+            albumService.delete(album);
+        }
+
     }
-
-
 }

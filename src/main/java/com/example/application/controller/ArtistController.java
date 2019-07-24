@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,9 +27,17 @@ public class ArtistController {
     ArtistService artistService;
 
     @GetMapping
-    public List<Artist> getAllArtists( ) {
+    public List<Artist> getAllArtists(@RequestParam(required=false) String name,
+                                      @RequestParam(required=false) Integer year,
+                                      @RequestParam(required=false) Integer[] genre) {
 
-        return artistService.getAll();
+        logger.debug("name"+name+" year "+year+"genreId "+genre);
+        if(name!=null && year!=null && genre!=null ){
+            logger.debug("inside filter");
+            return artistService.filter(name,year,genre);
+        }
+
+         return artistService.getAll();
     }
 
     @GetMapping("{id}")
@@ -54,13 +63,15 @@ public class ArtistController {
         return artistService.save(artist);
     }
 
+    @DeleteMapping
+    public void delete(@RequestParam("id") Integer[] id) {
 
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Integer id) {
-        Artist artist=artistService.getOne(id);
-        artistService.delete(artist);
+        for(Integer artistId:id){
+            Artist artist=artistService.getOne(artistId);
+            artistService.delete(artist);
+        }
+
     }
-
 
 }
 
