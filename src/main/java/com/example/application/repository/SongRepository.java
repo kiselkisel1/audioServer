@@ -13,9 +13,11 @@ import java.util.List;
 @Repository
 public interface SongRepository extends JpaRepository<Song, Integer> {
 
-//    @Query(value = "SELECT * FROM artist where name LIKE %:name% or :year between start_activity_year and end_activity_year or genre_id = :genreId", nativeQuery = true)
-//    @Query("select b from Song b where b.full_price <= :price and b.resort = :resort")
-//    List<Song> filter(@Param("name") String name, @Param("year") int year , @Param("genreId") int genreId);
+
+    @Query(value="select*from song where name LIKE %:name% or year = :year or album_id In (select id from album where artist_id in :artists)" +
+            " or album_id In (select id from album where artist_id" +
+            " in (select id from artist where genre_id in :genres))", nativeQuery = true)
+    List<Song> filter(@Param("name") String name, @Param("year") int year  ,@Param("artists") Integer[] artists,@Param("genres") Integer[] genres);
 
 
 }

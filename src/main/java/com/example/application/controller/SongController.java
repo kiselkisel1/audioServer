@@ -17,7 +17,13 @@ public class SongController {
     SongService songService;
 
     @GetMapping
-    public List<Song> getAllSongs() {
+    public List<Song> getAllSongs(@RequestParam(required=false) String name,
+                                  @RequestParam(required=false) Integer year,
+                                  @RequestParam(required=false) Integer[] artist,
+                                  @RequestParam(required=false) Integer[] genre) {
+        if(name!=null && year!=null && artist!=null && genre!=null){
+            return songService.filter(name,year,artist,genre);
+        }
         return songService.getAll();
     }
 

@@ -38,6 +38,9 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public Artist save(Artist artist) {
 
+        CurrentYear.validateYear(artist.getStart_activity_year());
+        CurrentYear.validateYear(artist.getEnd_activity_year());
+
         return artistRepository.save(artist);
     }
 

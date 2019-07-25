@@ -37,4 +37,9 @@ public class SongServiceImpl implements SongService {
     public void delete(Song song) {
     songRepository.delete(song);
     }
+
+    @Override
+    public List<Song> filter(String name, int year, Integer[] artist, Integer[] genres) {
+        return songRepository.filter(name,year,artist,genres);
+    }
 }

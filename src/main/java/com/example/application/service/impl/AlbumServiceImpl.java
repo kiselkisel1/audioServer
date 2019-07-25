@@ -6,6 +6,8 @@ import com.example.application.repository.AlbumRepository;
 import com.example.application.service.AlbumService;
 import com.example.application.service.ArtistService;
 import com.example.application.service.GenreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ public class AlbumServiceImpl implements AlbumService {
 
    @Autowired
    AlbumRepository albumRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(Album.class);
 
 
     @Override
@@ -43,8 +47,9 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public List<Album> filter(String name, int year, Integer[] artists) {
-        return albumRepository.filter(name,year,artists);
+    public List<Album> filter(String name, int year, Integer[] artists,Integer[]genres) {
+        logger.debug("it works");
+        return albumRepository.filter(name,year,artists,genres);
     }
 
 }

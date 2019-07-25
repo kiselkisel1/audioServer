@@ -9,14 +9,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AlbumDeserializer extends StdDeserializer<Album> {
+ public class AlbumDeserializer extends StdDeserializer<Album> {
+
+    private static final Logger logger = LoggerFactory.getLogger(Album.class);
 
     @Autowired
     ArtistService artistService;
@@ -43,7 +46,8 @@ public class AlbumDeserializer extends StdDeserializer<Album> {
         }
         if(node.hasNonNull("artist")  ){
             artist=artistService.getOne(node.get("artist").asInt());
-        }
+         }
+        logger.debug(name,year,notes,artist.toString());
 
         return new Album(name,year,notes,artist);
     }

@@ -18,6 +18,7 @@ import java.util.Set;
 @Table
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Genre {
 
     @Id
@@ -27,5 +28,7 @@ public class Genre {
     @NotBlank(message = "Genre is required")
     private String name;
 
-
+    public Genre(@NotBlank(message = "Genre is required") String name) {
+        this.name = name;
+    }
 }

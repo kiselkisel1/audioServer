@@ -19,6 +19,7 @@ import java.util.Set;
 @JsonDeserialize(using = ArtistDeserializer.class)
 @Data
 @NoArgsConstructor
+ @AllArgsConstructor
 @Entity
 @Table
 public class Artist {
@@ -49,4 +50,6 @@ public class Artist {
         this.end_activity_year = end_activity_year;
         this.genre = genre;
     }
+
+
 }

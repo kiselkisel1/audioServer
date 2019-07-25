@@ -2,6 +2,8 @@ package com.example.application.controller;
 
 import com.example.application.model.Album;
 import com.example.application.service.AlbumService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +18,16 @@ public class AlbumController {
     @Autowired
     AlbumService albumService;
 
+    private static final Logger logger = LoggerFactory.getLogger(Album.class);
+
     @GetMapping
     public List<Album> getAllAlbums(@RequestParam(required=false) String name,
                                     @RequestParam(required=false) Integer year,
-                                    @RequestParam(required=false) Integer[] artist) {
+                                    @RequestParam(required=false) Integer[] artist,
+                                    @RequestParam(required=false) Integer[] genre) {
 
-         if(name!=null && year!=null && artist!=null ){
-             return albumService.filter(name,year,artist);
+         if(name!=null && year!=null && artist!=null && genre!=null){
+              return albumService.filter(name,year,artist,genre);
         }
         return albumService.getAll();
     }
