@@ -39,12 +39,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
          return new ResponseEntity(errors, status);
     }
 
-//    @Override
-//    protected ResponseEntity<Object> handleInternalServer(HttpMessageNotReadableException ex,
-//                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        CustomErrorResponse errors = new CustomErrorResponse(LocalDateTime.now(),status.value(),ex.getMessage());
-//        return new ResponseEntity(errors, status);
-//    }
 
 
 

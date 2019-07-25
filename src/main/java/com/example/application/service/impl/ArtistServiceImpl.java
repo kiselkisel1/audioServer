@@ -31,7 +31,8 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Artist getOne(Integer id){
-        return artistRepository.findById(id)
+
+       return artistRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ARTIST_DOES_NOT_EXIST"));
     }
 

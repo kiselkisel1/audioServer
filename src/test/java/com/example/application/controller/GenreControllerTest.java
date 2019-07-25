@@ -1,12 +1,7 @@
 package com.example.application.controller;
 
-import com.example.application.model.Album;
-import com.example.application.model.Artist;
 import com.example.application.model.Genre;
 import com.example.application.repository.GenreRepository;
-import com.example.application.service.ArtistService;
-import com.example.application.service.GenreService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.core.Is.is;
 
@@ -46,40 +40,46 @@ public class GenreControllerTest {
 
 
     @Test
-    public void createArtist() throws Exception {
+    public void createGenre() throws Exception {
 
-        String inputJson=" {\n" +
+        Genre genre =new Genre(1,"genre1");
+//забыла указать поведение мока
+        given(genreRepository.save(any())).willReturn(genre);
 
-                "        \"name\": \"genre1\"\n" +
-                "    }";
-
-        Genre genre =new Genre("genre1");
         MvcResult mvcResult=mockMvc.perform(MockMvcRequestBuilders.post("/genres")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(genre))
                 .characterEncoding("utf-8"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("name", is(genre.getName())))
                 .andDo(print())
                 .andReturn();
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].name").exists());
-//                .andReturn();
-//                .andExpect(jsonPath("$[1].name", is(genre.getName())));
-
-//        MvcResult mvcResult2 = mockMvc.
-//                perform(MockMvcRequestBuilders.post("/genres")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)
-//                .characterEncoding("utf-8"))
-//                .andDo(print())
-//                .andReturn();
-
-
 
         String content = mvcResult.getResponse().getContentAsString();
         logger.debug("content= "+content);
-//        assertEquals(content, genre.toString());
 
     }
 
+
+    @Test
+    public void updateProduct() throws Exception {
+        Genre genre =new Genre("genre2");
+        given(genreRepository.save(any())).willReturn(genre);
+        mockMvc.perform(MockMvcRequestBuilders.put("/genres/3")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(asJsonString(genre))
+                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name", is(genre.getName())))
+                .andDo(print());
+    }
+
+    @Test
+    public void deleteProduct() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.
+                delete("/genres/2"))
+                .andExpect(status().isOk());
+    }
 
     public static String asJsonString(final Object obj) {
         try {

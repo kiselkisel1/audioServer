@@ -89,6 +89,7 @@ select * from genre ;
 insert into album_artist values (1, 3);
 
  use audioservice;
+
  create table artist (
   id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(200) NOT NULL,

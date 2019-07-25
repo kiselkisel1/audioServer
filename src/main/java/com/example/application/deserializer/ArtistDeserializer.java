@@ -51,6 +51,6 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
      }
     int start_activity_year =  node.get("start_activity_year").asInt();
 
-    return new Artist(name,notes,start_activity_year,end_activity_year,genre);
+     return new Artist(name,notes,start_activity_year,end_activity_year,genre);
 }
 }

@@ -15,9 +15,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
- @JsonSerialize(using = ArtistSerializer.class,include=JsonSerialize.Inclusion.NON_NULL)
+ @JsonSerialize(using = ArtistSerializer.class)
 @JsonDeserialize(using = ArtistDeserializer.class)
-@Data
+ @JsonInclude(JsonInclude.Include.NON_EMPTY)
+ @Data
 @NoArgsConstructor
  @AllArgsConstructor
 @Entity
