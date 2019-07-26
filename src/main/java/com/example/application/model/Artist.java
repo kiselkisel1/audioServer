@@ -2,6 +2,7 @@ package com.example.application.model;
 
 
 import com.example.application.deserializer.ArtistDeserializer;
+import com.example.application.exceptions.CustomException;
 import com.example.application.serializer.ArtistSerializer;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,8 +12,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Calendar;
 import java.util.Set;
 
  @JsonSerialize(using = ArtistSerializer.class)
@@ -36,11 +39,22 @@ public class Artist {
     @Size(max=2000,message = "Notes should contain less than 2000 symbols")
     private String notes;
 
+    @Min(1900)
      private int start_activity_year;
 
+     @Min(1900)
      private int end_activity_year;
 
-    @ManyToOne
+     public void setEnd_activity_year(int end_activity_year) {
+
+         if(end_activity_year>Calendar.getInstance().get(Calendar.YEAR)){
+             throw new CustomException("Year should be more from 1900 to current year");
+         }
+
+         this.end_activity_year = end_activity_year;
+     }
+
+     @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
 

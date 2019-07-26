@@ -27,8 +27,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
         CustomErrorResponse errors = new CustomErrorResponse(LocalDateTime.now(),status.value(),ex.getMessage());
         errors.setFieldErrors(ex.getBindingResult().getFieldErrors());
-//       errors.addValidationList(ex.getBindingResult().getFieldErrors());
-        return new ResponseEntity(errors,HttpStatus.BAD_REQUEST);
+         return new ResponseEntity(errors,HttpStatus.BAD_REQUEST);
     }
 
     //exception 400 if json is not valid.In controller it is annotated @Valid
@@ -39,8 +38,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
          return new ResponseEntity(errors, status);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<CustomErrorResponse> handleRunTimeException(Exception ex, WebRequest request) {
+        CustomErrorResponse errors = new CustomErrorResponse(LocalDateTime.now(),HttpStatus.INTERNAL_SERVER_ERROR.value(),ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-
-
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<CustomErrorResponse> handleCustomException(Exception ex, WebRequest request) {
+        CustomErrorResponse errors = new CustomErrorResponse(LocalDateTime.now(),HttpStatus.BAD_REQUEST.value(),ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 }
 

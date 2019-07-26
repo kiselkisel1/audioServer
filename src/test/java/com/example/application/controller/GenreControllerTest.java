@@ -64,7 +64,9 @@ public class GenreControllerTest {
     @Test
     public void updateProduct() throws Exception {
         Genre genre =new Genre("genre2");
-        given(genreRepository.save(any())).willReturn(genre);
+
+        given(genreRepository.save(any())).willReturn(genre );
+
         mockMvc.perform(MockMvcRequestBuilders.put("/genres/3")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(genre))

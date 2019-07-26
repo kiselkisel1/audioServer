@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.IntNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,7 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
             throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
+
     String name = node.get("name").asText();
     String notes=null;
     int end_activity_year=0;
@@ -44,7 +44,7 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
      }
      if(node.hasNonNull("end_activity_year")){
          end_activity_year=node.get("end_activity_year").asInt();
-     }
+      }
 
      if(node.hasNonNull("genre")){
          genre=genreService.getOne(node.get("genre").asInt());
