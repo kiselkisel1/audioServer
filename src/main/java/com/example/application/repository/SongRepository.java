@@ -19,5 +19,7 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
             " in (select id from artist where genre_id in :genres))", nativeQuery = true)
     List<Song> filter(@Param("name") String name, @Param("year") int year  ,@Param("artists") Integer[] artists,@Param("genres") Integer[] genres);
 
+    @Query("select u from Song u where u.name = :name and u.year = :year")
+    Song findByNameAndYear(@Param("name") String name,@Param("year") Integer year);
 
 }

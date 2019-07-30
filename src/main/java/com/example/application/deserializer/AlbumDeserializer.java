@@ -3,6 +3,7 @@ package com.example.application.deserializer;
 import com.example.application.model.Album;
 import com.example.application.model.Artist;
 import com.example.application.service.ArtistService;
+import com.example.application.utils.ValidateCurrentYear;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -38,8 +39,8 @@ import java.util.Set;
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         String name = node.get("name").asText();
-        int year =  node.get("year").asInt();
-        String notes=null;
+        int year =  ValidateCurrentYear.ValidateYear( node.get("year").asInt());
+         String notes=null;
         Artist artist=null;
         if(node.hasNonNull("notes")  ){
             notes = node.get("notes").asText();

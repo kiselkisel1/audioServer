@@ -3,6 +3,7 @@ package com.example.application.deserializer;
 import com.example.application.model.Artist;
 import com.example.application.model.Genre;
 import com.example.application.service.GenreService;
+import com.example.application.utils.ValidateCurrentYear;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -43,13 +44,13 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
          notes = node.get("notes").asText();
      }
      if(node.hasNonNull("end_activity_year")){
-         end_activity_year=node.get("end_activity_year").asInt();
-      }
+         end_activity_year=ValidateCurrentYear.ValidateYear(node.get("end_activity_year").asInt());
+       }
 
      if(node.hasNonNull("genre")){
          genre=genreService.getOne(node.get("genre").asInt());
      }
-    int start_activity_year =  node.get("start_activity_year").asInt();
+    int start_activity_year =  ValidateCurrentYear.ValidateYear(node.get("start_activity_year").asInt());
 
      return new Artist(name,notes,start_activity_year,end_activity_year,genre);
 }

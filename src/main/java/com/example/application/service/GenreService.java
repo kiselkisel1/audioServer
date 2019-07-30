@@ -9,4 +9,5 @@ public interface GenreService {
     Genre getOne(Integer id);
     Genre save(Genre genre);
     void delete(Genre genre);
+    Genre findByName(String name);
 }

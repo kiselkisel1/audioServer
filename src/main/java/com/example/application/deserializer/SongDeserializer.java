@@ -6,6 +6,7 @@ import com.example.application.model.Genre;
 import com.example.application.model.Song;
 import com.example.application.service.AlbumService;
 import com.example.application.service.GenreService;
+import com.example.application.utils.ValidateCurrentYear;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -36,7 +37,7 @@ public class SongDeserializer extends StdDeserializer<Song> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         String name = node.get("name").asText();
-        int year =  node.get("year").asInt();
+        int year =  ValidateCurrentYear.ValidateYear( node.get("year").asInt());
         String comment = node.get("comment").asText();
 
         Album album=null;

@@ -32,22 +32,16 @@ public class Album {
     @Size(min=5,max=200,message = "Name should contain from 5 to 200 symbols")
     private String name;
 
-    @Min(1900)
      private int year;
 
     @Size(max=2000,message = "Notes should contain less than 2000 symbols")
     private String notes;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    public void setYear(int year) {
-        if(year> Calendar.getInstance().get(Calendar.YEAR)){
-            throw new CustomException("Year should be more from 1900 to current year");
-        }
-        this.year = year;
-    }
+
 
     public Album(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, int year, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, Artist artist) {
         this.name = name;

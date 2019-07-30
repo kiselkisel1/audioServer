@@ -15,4 +15,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Integer> {
      @Query(value = "SELECT * FROM artist where name LIKE %:name% or :year between start_activity_year and end_activity_year or genre_id In :genres", nativeQuery = true)
      List<Artist> filter(@Param("name") String name, @Param("year") int year , @Param("genres") Integer[] genres);
 
+     @Query("select u from Artist u where u.name = :name")
+     Artist findByName(@Param("name") String name);
 }

@@ -18,43 +18,33 @@ import javax.validation.constraints.Size;
 import java.util.Calendar;
 import java.util.Set;
 
- @JsonSerialize(using = ArtistSerializer.class)
+@JsonSerialize(using = ArtistSerializer.class)
 @JsonDeserialize(using = ArtistDeserializer.class)
- @JsonInclude(JsonInclude.Include.NON_EMPTY)
- @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Data
 @NoArgsConstructor
- @AllArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table
 public class Artist {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotBlank(message = "Name is required")
-    @Size(min=5,max=200,message = "Name should contain from 5 to 200 symbols")
+    @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols")
     private String name;
 
-    @Size(max=2000,message = "Notes should contain less than 2000 symbols")
+    @Size(max = 2000, message = "Notes should contain less than 2000 symbols")
     private String notes;
 
-    @Min(1900)
-     private int start_activity_year;
+    private int start_activity_year;
 
-     @Min(1900)
-     private int end_activity_year;
+    private int end_activity_year;
 
-     public void setEnd_activity_year(int end_activity_year) {
 
-         if(end_activity_year>Calendar.getInstance().get(Calendar.YEAR)){
-             throw new CustomException("Year should be more from 1900 to current year");
-         }
-
-         this.end_activity_year = end_activity_year;
-     }
-
-     @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 

@@ -50,4 +50,9 @@ public class AlbumServiceImpl implements AlbumService {
         return albumRepository.filter(name, year, artists, genres);
     }
 
+    @Override
+    public Album findByNameAndYear(String name, Integer year) {
+        return albumRepository.findByNameAndYear(name,year);
+    }
+
 }

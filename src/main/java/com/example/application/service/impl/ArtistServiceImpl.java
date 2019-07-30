@@ -49,4 +49,9 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.filter(name, year, genreId);
     }
 
+    @Override
+    public Artist findByName(String name) {
+        return artistRepository.findByName(name);
+    }
+
 }
