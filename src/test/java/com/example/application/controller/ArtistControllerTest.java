@@ -67,10 +67,10 @@ public class ArtistControllerTest {
 
     @Test
     public void getArtistByIdReturn404() throws Exception {
-         when(artistService.getOne(5)).thenThrow(new ResourceNotFoundException("ARTIST_DOES_NOT_EXISTS"));
+        when(artistService.getOne(5)).thenThrow(new ResourceNotFoundException("ARTIST_DOES_NOT_EXISTS"));
         mockMvc.perform(get("/artists/5"))
                 .andExpect(status().is4xxClientError());
-     }
+    }
 
     @Test
     public void getArtistByIdReturn500() throws Exception {
@@ -79,7 +79,7 @@ public class ArtistControllerTest {
         mockMvc.perform(get("/artists/5"))
                 .andExpect(status().isInternalServerError());
 
-     }
+    }
 
 
     @Test
@@ -107,8 +107,6 @@ public class ArtistControllerTest {
         logger.debug("content = " + content);
 
     }
-
-
 
 
     @Test
@@ -141,7 +139,7 @@ public class ArtistControllerTest {
                 .content(asJsonString(artist2))
                 .characterEncoding("utf-8"))
                 .andExpect(status().is4xxClientError())
-                 .andDo(print())
+                .andDo(print())
                 .andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();
@@ -175,6 +173,7 @@ public class ArtistControllerTest {
         mockMvc.perform(delete("/artists?id=4"))
                 .andExpect(status().isOk());
     }
+
     @Test
     public void deleteProductThrowsBadRequest() throws Exception {
 

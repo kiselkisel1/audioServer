@@ -30,17 +30,3 @@ public class SongParser {
         return metadata;
     }
 }
-
-//        String[] metadataNames = metadata.names();
-//
-//                for (String name : metadataNames) {
-//                System.out.println(name + ": " + metadata.get(name));
-//                }
-
-//       System.out.println("----------------------------------------------");
-//       System.out.println("Title: " + metadata.get("title"));
-//       System.out.println("Artists: " + metadata.get("xmpDM:artist"));
-//       System.out.println("Composer : "+metadata.get("xmpDM:composer"));
-//       System.out.println("Genre : "+metadata.get("xmpDM:genre"));
-//       System.out.println("Album : "+metadata.get("xmpDM:album"));
-
