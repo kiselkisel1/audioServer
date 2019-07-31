@@ -5,6 +5,7 @@ import com.example.application.model.Artist;
 import com.example.application.model.Song;
 import com.example.application.service.SongService;
 import com.example.application.utils.LoadFile;
+import com.example.application.utils.MultipartFileSender;
 import org.apache.commons.compress.utils.IOUtils;
 import org.farng.mp3.MP3File;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
@@ -50,13 +52,22 @@ public class SongController {
 
 
 
+//    @GetMapping("{id}")
+//    public void getOne(@PathVariable Integer id,HttpServletResponse response) throws IOException {
+//
+//        songService.getStream(songService.getOne(id),response);
+//
+//     }
+
     @GetMapping("{id}")
-    public void getMp3(@PathVariable Integer id,HttpServletResponse response) throws IOException {
+    public void getEpisodeFile(@PathVariable Integer id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+      Song song=songService.getOne(id);
+            MultipartFileSender.fromURIString(song.getPath())
+                    .with(request)
+                    .with(response)
+                    .serveResource();
 
-        songService.getStream(songService.getOne(id),response);
-     }
-
-
+        }
 
     @PostMapping
     public Song create(@RequestBody @Valid MultipartFile file) throws IOException {

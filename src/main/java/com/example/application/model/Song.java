@@ -1,20 +1,14 @@
 package com.example.application.model;
 
 
-import com.example.application.deserializer.SongDeserializer;
-import com.example.application.exceptions.CustomException;
 import com.example.application.serializer.SongSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Calendar;
 
 @JsonSerialize(using = SongSerializer.class)
 //@JsonDeserialize(using = SongDeserializer.class)
@@ -39,8 +33,7 @@ public class Song {
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "album_id")
+     @JoinColumn(name = "album_id")
     private Album album;
 
 

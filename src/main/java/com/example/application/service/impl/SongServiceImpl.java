@@ -128,8 +128,7 @@ public class SongServiceImpl implements SongService {
         InputStream input = new FileInputStream(file);
         logger.debug("file name "+file.getName());
 
-        // Set the content type and attachment header.
-        response.addHeader("Content-disposition", "attachment;filename="+file.getName());
+         response.addHeader("Content-disposition", "attachment;filename="+file.getName());
         response.setContentType("audio/mpeg");
         // Copy the stream to the response's output stream.
         IOUtils.copy(input, response.getOutputStream());
