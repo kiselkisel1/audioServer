@@ -28,11 +28,23 @@ import java.io.IOException;
 
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", artist.getId());
-        jsonGenerator.writeStringField("name", artist.getName());
-        jsonGenerator.writeStringField("notes", artist.getNotes());
-        jsonGenerator.writeNumberField("start_activity_year", artist.getStart_activity_year());
-        jsonGenerator.writeNumberField("end_activity_year", artist.getEnd_activity_year());
-        if(artist.getGenre()!=null){
+        if(artist.getName()!=null){
+            jsonGenerator.writeStringField("name", artist.getName());
+
+        }
+        if(artist.getNotes()!=null){
+            jsonGenerator.writeStringField("notes", artist.getNotes());
+
+        }
+        if(artist.getStart_activity_year()!=null){
+            jsonGenerator.writeNumberField("start_activity_year", artist.getStart_activity_year());
+        }
+
+        if(artist.getEnd_activity_year()!=null){
+            jsonGenerator.writeNumberField("end_activity_year", artist.getEnd_activity_year());
+
+        }
+         if(artist.getGenre()!=null){
            jsonGenerator.writeNumberField("genre", artist.getGenre().getId());
        }
 

@@ -6,7 +6,7 @@ import java.time.Year;
 
 public class ValidateCurrentYear {
 
-    public static int ValidateYear(int year) {
+    public static Integer ValidateYear(Integer year) {
         if ((year < 1900) || (year > Year.now().getValue())) {
             throw new CustomException("Year should be from 1900 to current year");
         }

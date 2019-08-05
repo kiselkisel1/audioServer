@@ -10,5 +10,5 @@ public interface AlbumService {
     Album save(Album album);
     void delete(Album album);
     List<Album> filter( String name, int year,Integer[] artist,Integer[]genres);
-    Album findByNameAndYear(String name,Integer year);
+    Album findByName (String name );
 }

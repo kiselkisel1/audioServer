@@ -19,10 +19,9 @@ public class Genre {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Genre is required")
-    private String name;
+     private String name;
 
-    public Genre(@NotBlank(message = "Genre is required") String name) {
+    public Genre(String name) {
         this.name = name;
     }
 }

@@ -17,6 +17,6 @@ public interface AlbumRepository extends JpaRepository<Album,Integer> {
             "(select id from artist where genre_id in :genres)", nativeQuery = true)
     List<Album> filter(@Param("name") String name, @Param("year") int year  ,@Param("artists") Integer[] artists,@Param("genres") Integer[] genres);
 
-    @Query("select u from Album u where u.name = :name and u.year = :year")
-    Album findByNameAndYear(@Param("name") String name,@Param("year") Integer year);
+    @Query("select u from Album u where u.name = :name ")
+    Album findByName (@Param("name") String name );
 }

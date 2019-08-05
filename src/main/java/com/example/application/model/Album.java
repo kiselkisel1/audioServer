@@ -1,20 +1,14 @@
 package com.example.application.model;
- import com.example.application.deserializer.AlbumDeserializer;
- import com.example.application.exceptions.CustomException;
- import com.example.application.serializer.AlbumSerializer;
- import com.fasterxml.jackson.annotation.JsonIgnore;
- import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
- import com.fasterxml.jackson.databind.annotation.JsonSerialize;
- import lombok.AllArgsConstructor;
- import lombok.Data;
- import lombok.NoArgsConstructor;
 
- import javax.persistence.*;
- import javax.validation.constraints.Min;
- import javax.validation.constraints.NotBlank;
- import javax.validation.constraints.Size;
- import java.util.Calendar;
- import java.util.Set;
+import com.example.application.deserializer.AlbumDeserializer;
+import com.example.application.serializer.AlbumSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @JsonSerialize(using = AlbumSerializer.class)
 @JsonDeserialize(using = AlbumDeserializer.class)
@@ -28,11 +22,11 @@ public class Album {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Name is required")
-    @Size(min=5,max=200,message = "Name should contain from 5 to 200 symbols")
+
+    @Size(max=200,message = "Name should contain symbols")
     private String name;
 
-     private int year;
+     private Integer year;
 
     @Size(max=2000,message = "Notes should contain less than 2000 symbols")
     private String notes;
@@ -43,10 +37,16 @@ public class Album {
 
 
 
-    public Album(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, int year, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, Artist artist) {
+    public Album(@Size(max = 200, message = "Name should contain 200 symbols") String name, Integer year, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes, Artist artist) {
         this.name = name;
         this.year = year;
         this.notes = notes;
         this.artist = artist;
+    }
+
+    public Album(@Size(max = 200, message = "Name should contain symbols") String name, Integer year, @Size(max = 2000, message = "Notes should contain less than 2000 symbols") String notes) {
+        this.name = name;
+        this.year = year;
+        this.notes = notes;
     }
 }

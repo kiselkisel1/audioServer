@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -26,10 +27,11 @@ public class Song {
     @Size(min=5,max=200,message = "Name should contain from 5 to 200 symbols")
     private String name;
 
-     private int year;
+     private Integer year;
 
     private String comment;
 
+    @NotBlank
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
@@ -37,14 +39,14 @@ public class Song {
     private Album album;
 
 
-    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, int year, String comment, Album album) {
+    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year, String comment, Album album) {
         this.name = name;
         this.year = year;
         this.comment = comment;
         this.album = album;
     }
 
-    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, int year, String comment, String path, Album album) {
+    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year, String comment, String path, Album album) {
         this.name = name;
         this.year = year;
         this.comment = comment;

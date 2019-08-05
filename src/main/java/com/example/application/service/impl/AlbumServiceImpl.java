@@ -51,8 +51,8 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Album findByNameAndYear(String name, Integer year) {
-        return albumRepository.findByNameAndYear(name,year);
+    public Album findByName (String name ) {
+        return albumRepository.findByName (name );
     }
 
 }

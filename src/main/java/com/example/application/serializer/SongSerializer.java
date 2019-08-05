@@ -23,9 +23,16 @@ public class SongSerializer extends StdSerializer<Song> {
 
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", song.getId());
-        jsonGenerator.writeStringField("name", song.getName());
-        jsonGenerator.writeNumberField("year", song.getYear());
-        jsonGenerator.writeStringField("comment", song.getComment());
+        if (song.getName() != null) {
+            jsonGenerator.writeStringField("name",song.getName());
+        }
+
+        if (song.getYear() != null) {
+            jsonGenerator.writeNumberField("year", song.getYear());
+        }
+        if(song.getComment()!=null) {
+            jsonGenerator.writeStringField("comment", song.getComment());
+        }
         if(song.getAlbum().getArtist()!=null){
             jsonGenerator.writeNumberField("artist",song.getAlbum().getArtist().getId());
         }

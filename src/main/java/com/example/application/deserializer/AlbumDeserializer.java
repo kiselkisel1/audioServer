@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
- public class AlbumDeserializer extends StdDeserializer<Album> {
+public class AlbumDeserializer extends StdDeserializer<Album> {
 
     private static final Logger logger = LoggerFactory.getLogger(Album.class);
 
@@ -38,18 +38,24 @@ import java.util.Set;
             throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        String name = node.get("name").asText();
-        int year =  ValidateCurrentYear.ValidateYear( node.get("year").asInt());
-         String notes=null;
-        Artist artist=null;
-        if(node.hasNonNull("notes")  ){
+        String name = null;
+        String notes = null;
+
+        Integer year = null;
+        Artist artist = null;
+        if (node.hasNonNull("name")) {
+            name = node.get("name").asText();
+        }
+        if (node.hasNonNull("year")) {
+            year = ValidateCurrentYear.ValidateYear(node.get("year").asInt());
+        }
+        if (node.hasNonNull("notes")) {
             notes = node.get("notes").asText();
         }
-        if(node.hasNonNull("artist")  ){
-            artist=artistService.getOne(node.get("artist").asInt());
-         }
-        logger.debug(name,year,notes,artist.toString());
+        if (node.hasNonNull("artist")) {
+            artist = artistService.getOne(node.get("artist").asInt());
+        }
 
-        return new Album(name,year,notes,artist);
+        return new Album(name, year, notes, artist);
     }
 }

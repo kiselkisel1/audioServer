@@ -24,15 +24,21 @@ public class AlbumSerializer extends StdSerializer<Album> {
 
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", album.getId());
-        jsonGenerator.writeStringField("name", album.getName());
-        jsonGenerator.writeNumberField("year", album.getYear());
-        jsonGenerator.writeStringField("notes", album.getNotes());
-
-        if(album.getArtist()!=null){
-            jsonGenerator.writeNumberField("artist",album.getArtist().getId());
+        if (album.getName() != null) {
+            jsonGenerator.writeStringField("name", album.getName());
         }
-        if(album.getArtist().getGenre() !=null){
-            jsonGenerator.writeNumberField("genre",album.getArtist().getGenre().getId());
+
+        if (album.getYear() != null) {
+            jsonGenerator.writeNumberField("year", album.getYear());
+        }
+        if (album.getNotes() != null) {
+            jsonGenerator.writeStringField("notes", album.getNotes());
+        }
+        if (album.getArtist() != null) {
+            jsonGenerator.writeNumberField("artist", album.getArtist().getId());
+            if (album.getArtist().getGenre() != null) {
+                jsonGenerator.writeNumberField("genre", album.getArtist().getGenre().getId());
+            }
         }
 
         jsonGenerator.writeEndObject();

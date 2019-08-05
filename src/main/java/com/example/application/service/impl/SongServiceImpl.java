@@ -66,7 +66,7 @@ public class SongServiceImpl implements SongService {
             metadata = SongParser.readSong(fileLocation);
 
             songFromDb = songRepository.findByNameAndYear(metadata.get("title"), Integer.parseInt(metadata.get("xmpDM:releaseDate")));
-            Album album = albumRepository.findByNameAndYear(metadata.get("xmpDM:album"), 2000);
+            Album album = albumRepository.findByName(metadata.get("xmpDM:album")   );
             Artist artist = artistRepository.findByName(metadata.get("xmpDM:artist"));
             Genre genre = genreRepository.findByName(metadata.get("xmpDM:genre"));
 
@@ -74,11 +74,11 @@ public class SongServiceImpl implements SongService {
                 genre = new Genre(metadata.get("xmpDM:genre"));
             }
             if (artist == null) {
-                artist = new Artist(metadata.get("xmpDM:artist"), "notes", 1900, 2010, genre);
+                artist = new Artist(metadata.get("xmpDM:artist"), "notes", null, null, genre);
 
             }
             if (album == null) {
-                album = new Album(metadata.get("xmpDM:album"), 2000, null, artist);
+                album = new Album(metadata.get("xmpDM:album"), null, null, artist);
 
             }
             if (song == null) {
@@ -124,14 +124,15 @@ public class SongServiceImpl implements SongService {
     @Override
     public void getStream(Song song, HttpServletResponse response) throws IOException {
 
-        File file=new File(song.getPath());
+        File file = new File(song.getPath());
         InputStream input = new FileInputStream(file);
-        logger.debug("file name "+file.getName());
 
-         response.addHeader("Content-disposition", "attachment;filename="+file.getName());
         response.setContentType("audio/mpeg");
-        // Copy the stream to the response's output stream.
-        IOUtils.copy(input, response.getOutputStream());
+        response.addHeader("Content-disposition", "attachment;filename=" + file.getName());
+        response.addHeader("Accept-Ranges", "bytes");
+        response.addHeader("Content-Transfer-Encoding", "binary");
+        response.addHeader("Connection", "close");
+         IOUtils.copy(input, response.getOutputStream());
         response.flushBuffer();
 
     }

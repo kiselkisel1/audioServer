@@ -25,6 +25,7 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
     protected ArtistDeserializer(Class<?> vc) {
         super(vc);
     }
+
     protected ArtistDeserializer() {
         this(null);
     }
@@ -35,23 +36,28 @@ public class ArtistDeserializer extends StdDeserializer<Artist> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
 
-    String name = node.get("name").asText();
-    String notes=null;
-    int end_activity_year=0;
-    Genre genre=null;
+        String name = null;
+        Integer start_activity_year=null;
+        String notes = null;
+        Integer end_activity_year =null;
+        Genre genre = null;
 
-     if(node.hasNonNull("notes")  ){
-         notes = node.get("notes").asText();
-     }
-     if(node.hasNonNull("end_activity_year")){
-         end_activity_year=ValidateCurrentYear.ValidateYear(node.get("end_activity_year").asInt());
-       }
+        if (node.hasNonNull("name")) {
+            name = node.get("name").asText();
+        }
+        if (node.hasNonNull("notes")) {
+            notes = node.get("notes").asText();
+        }
+        if (node.hasNonNull("end_activity_year")) {
+            end_activity_year = ValidateCurrentYear.ValidateYear(node.get("end_activity_year").asInt());
+        }
 
-     if(node.hasNonNull("genre")){
-         genre=genreService.getOne(node.get("genre").asInt());
-     }
-    int start_activity_year =  ValidateCurrentYear.ValidateYear(node.get("start_activity_year").asInt());
-
-     return new Artist(name,notes,start_activity_year,end_activity_year,genre);
-}
+        if (node.hasNonNull("genre")) {
+            genre = genreService.getOne(node.get("genre").asInt());
+        }
+        if (node.hasNonNull("end_activity_year")) {
+            start_activity_year = ValidateCurrentYear.ValidateYear(node.get("start_activity_year").asInt());
+        }
+        return new Artist(name, notes, start_activity_year, end_activity_year, genre);
+    }
 }

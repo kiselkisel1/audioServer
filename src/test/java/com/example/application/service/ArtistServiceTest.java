@@ -24,6 +24,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ArtistServiceTest {
+
     @MockBean
     ArtistRepository artistRepository;
 
