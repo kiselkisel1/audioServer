@@ -1,18 +1,12 @@
 package com.example.application.controller;
 
-import com.example.application.exceptions.ResourceNotFoundException;
 import com.example.application.model.Artist;
 import com.example.application.service.ArtistService;
-import com.example.application.validator.ArtistValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import javax.validation.Valid;
 import java.util.List;

@@ -39,17 +39,18 @@ public class Song {
     private Album album;
 
 
-    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year, String comment, Album album) {
-        this.name = name;
-        this.year = year;
-        this.comment = comment;
-        this.album = album;
-    }
+
 
     public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year, String comment, String path, Album album) {
         this.name = name;
         this.year = year;
         this.comment = comment;
+        this.path = path;
+        this.album = album;
+    }
+    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year , String path, Album album) {
+        this.name = name;
+        this.year = year;
         this.path = path;
         this.album = album;
     }

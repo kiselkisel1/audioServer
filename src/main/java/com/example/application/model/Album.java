@@ -49,4 +49,8 @@ public class Album {
         this.year = year;
         this.notes = notes;
     }
+    public Album(@Size(max = 200, message = "Name should contain 200 symbols") String name , Artist artist) {
+        this.name = name;
+        this.artist = artist;
+    }
 }

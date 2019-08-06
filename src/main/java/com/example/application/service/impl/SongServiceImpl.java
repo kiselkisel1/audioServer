@@ -19,10 +19,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -43,6 +47,9 @@ public class SongServiceImpl implements SongService {
     @Autowired
     AlbumRepository albumRepository;
 
+
+    private static final int SIZE_8 = 8192;
+
     @Override
     public List<Song> getAll() {
         return songRepository.findAll();
@@ -55,7 +62,7 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Song save(String fileLocation) {
+    public Song save(MultipartFile multipartFile) {
 
         Metadata metadata;
 
@@ -63,10 +70,19 @@ public class SongServiceImpl implements SongService {
         Song songFromDb = null;
 
         try {
-            metadata = SongParser.readSong(fileLocation);
+            File file = SongParser.getFileAfterLoading(multipartFile);
+            metadata = SongParser.readSong(file);
 
-            songFromDb = songRepository.findByNameAndYear(metadata.get("title"), Integer.parseInt(metadata.get("xmpDM:releaseDate")));
-            Album album = albumRepository.findByName(metadata.get("xmpDM:album")   );
+
+            Integer songYear = null;
+            try {
+                songYear = Integer.parseInt(metadata.get("xmpDM:releaseDate"));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+            songFromDb = songRepository.findByNameAndYear(metadata.get("title"), songYear);
+            Album album = albumRepository.findByName(metadata.get("xmpDM:album"));
             Artist artist = artistRepository.findByName(metadata.get("xmpDM:artist"));
             Genre genre = genreRepository.findByName(metadata.get("xmpDM:genre"));
 
@@ -74,15 +90,15 @@ public class SongServiceImpl implements SongService {
                 genre = new Genre(metadata.get("xmpDM:genre"));
             }
             if (artist == null) {
-                artist = new Artist(metadata.get("xmpDM:artist"), "notes", null, null, genre);
+                artist = new Artist(metadata.get("xmpDM:artist"), genre);
 
             }
             if (album == null) {
-                album = new Album(metadata.get("xmpDM:album"), null, null, artist);
+                album = new Album(metadata.get("xmpDM:album"), artist);
 
             }
             if (song == null) {
-                song = new Song(metadata.get("title"), Integer.parseInt(metadata.get("xmpDM:releaseDate")), null, fileLocation, album);
+                song = new Song(metadata.get("title"), songYear, file.getAbsolutePath(), album);
 
             }
 
@@ -104,6 +120,7 @@ public class SongServiceImpl implements SongService {
         } else {
             return songRepository.save(song);
         }
+
     }
 
 
@@ -122,18 +139,48 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public void getStream(Song song, HttpServletResponse response) throws IOException {
+    public void getStream(Song song, HttpServletResponse response, HttpServletRequest request) throws IOException {
+
 
         File file = new File(song.getPath());
-        InputStream input = new FileInputStream(file);
+        String strRange = request.getHeader("Range");
+
+        int range = 0;
+        if (strRange != null) {
+            range = Integer.parseInt(strRange.replaceAll("\\D+", ""));
+        }
+
+        byte[] bytes = Files.readAllBytes(file.toPath());
+
+        byte[] chunk;
+
+        response.reset();
 
         response.setContentType("audio/mpeg");
-        response.addHeader("Content-disposition", "attachment;filename=" + file.getName());
-        response.addHeader("Accept-Ranges", "bytes");
         response.addHeader("Content-Transfer-Encoding", "binary");
+
+        if (range + SIZE_8 >= bytes.length) {
+            logger.debug("bigger then length of array");
+            chunk = Arrays.copyOfRange(bytes, range, bytes.length);
+            response.addHeader("Content-Range", "bytes " + range + "-" + (bytes.length - 1) + "/" + file.length());
+            logger.debug("from: " + range + " to " + bytes.length);
+            response.setStatus(200);
+        } else {
+            chunk = Arrays.copyOfRange(bytes, range, range + SIZE_8);
+            response.addHeader("Content-Range", "bytes " + range + "-" + ((range + SIZE_8) - 1) + "/" + file.length());
+            logger.debug("from: " + range + " to " + ((range + SIZE_8) - 1));
+            response.setStatus(206);
+        }
+
+        response.addHeader("Accept-Range", "bytes");
+        response.addHeader("Content-Disposition", "inline");
+        response.addHeader("Content-Length", String.valueOf(chunk.length));
         response.addHeader("Connection", "close");
-         IOUtils.copy(input, response.getOutputStream());
+
+        InputStream byteInputStream = new ByteArrayInputStream(chunk);
+        IOUtils.copy(byteInputStream, response.getOutputStream());
         response.flushBuffer();
+
 
     }
 

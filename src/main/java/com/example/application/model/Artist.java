@@ -54,5 +54,9 @@ public class Artist {
         this.genre = genre;
     }
 
+    public Artist( @Size(max = 200, message = "Name should contain from 5 to 200 symbols") String name,  Genre genre) {
+        this.name = name;
 
+        this.genre = genre;
+    }
 }
