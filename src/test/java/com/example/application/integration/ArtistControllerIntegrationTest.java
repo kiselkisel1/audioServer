@@ -69,10 +69,10 @@ public class ArtistControllerIntegrationTest {
     public void getOne() throws Exception {
         HttpEntity<String> entity = new HttpEntity<String>(null, setHeader());
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/artists/63"), HttpMethod.GET, entity, String.class);
+                createURLWithPort("/artists/70"), HttpMethod.GET, entity, String.class);
 
         logger.debug("RESPONSE BODY " + response.getBody());
-        String expected = "{\"id\":63,\"name\":\"Death Grips\" ,\"notes\":\"notes\",\"genre\":37}";
+        String expected = "{\"id\":70,\"name\":\"Death Grips\" ,\"genre\":40}";
 
         JSONAssert.assertEquals(expected, response.getBody(), false);
     }
@@ -96,7 +96,7 @@ public class ArtistControllerIntegrationTest {
     @Test
     public void saveArtistAndReturn200() {
 
-        String expected = "{\"name\":\"Death Grips\",\"notes\":\"notes\",\"genre\":37}";
+        String expected = "{\"name\":\"Hello world\",\"notes\":\"notes\",\"genre\":40}";
 
 
         HttpEntity<String> entity = new HttpEntity<>(expected, setHeader());
@@ -116,12 +116,12 @@ public class ArtistControllerIntegrationTest {
 
     @Test
     public void updateArtistAndReturn200(){
-        String expected = "{ \"name\":\"Hello\",\"notes\":\"notes\",\"genre\":37}";
+        String expected = "{ \"name\":\"Hello\",\"notes\":\"notes\",\"genre\":40}";
 
 
         HttpEntity<String> entity = new HttpEntity<>(expected, setHeader());
 
-        ResponseEntity<String> response = restTemplate.exchange("/artists/{id}", HttpMethod.PUT, entity, String.class,64);
+        ResponseEntity<String> response = restTemplate.exchange("/artists/{id}", HttpMethod.PUT, entity, String.class,71);
 
         logger.debug(response.toString());
 

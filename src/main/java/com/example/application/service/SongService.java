@@ -3,9 +3,6 @@ package com.example.application.service;
 import com.example.application.model.Song;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 public interface SongService {
@@ -15,8 +12,9 @@ public interface SongService {
      void delete(Song song);
     List<Song> filter(String name, int year, Integer[] artist, Integer[]genres);
 
-    void getStream(Song song, HttpServletResponse response,HttpServletRequest request) throws IOException;
+    byte[] getStream(Song song,int range);
     Song findByNameAndYear(String name,Integer year);
 
+    Integer getStartPosition(String range);
 
 }

@@ -34,11 +34,11 @@ public class Song {
     @NotBlank
     private String path;
 
+    private Long file_length;
+
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
      @JoinColumn(name = "album_id")
     private Album album;
-
-
 
 
     public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year, String comment, String path, Album album) {
@@ -48,6 +48,14 @@ public class Song {
         this.path = path;
         this.album = album;
     }
+    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year , String path,Long file_length, Album album) {
+        this.name = name;
+        this.year = year;
+        this.path = path;
+        this.file_length=file_length;
+        this.album = album;
+    }
+
     public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year , String path, Album album) {
         this.name = name;
         this.year = year;

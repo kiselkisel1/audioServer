@@ -10,7 +10,10 @@ import com.example.application.repository.ArtistRepository;
 import com.example.application.repository.GenreRepository;
 import com.example.application.repository.SongRepository;
 import com.example.application.service.SongService;
+import com.example.application.stream.Stream;
+import com.example.application.stream.impl.FileSystemStream;
 import com.example.application.utils.SongParser;
+import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -47,8 +50,9 @@ public class SongServiceImpl implements SongService {
     @Autowired
     AlbumRepository albumRepository;
 
+    @Autowired
+    FileSystemStream fileSystemStream;
 
-    private static final int SIZE_8 = 8192;
 
     @Override
     public List<Song> getAll() {
@@ -98,7 +102,7 @@ public class SongServiceImpl implements SongService {
 
             }
             if (song == null) {
-                song = new Song(metadata.get("title"), songYear, file.getAbsolutePath(), album);
+                song = new Song(metadata.get("title"), songYear, file.getAbsolutePath(),file.length(), album);
 
             }
 
@@ -139,48 +143,16 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public void getStream(Song song, HttpServletResponse response, HttpServletRequest request) throws IOException {
+    public byte[] getStream(Song song, int range) {
 
-
-        File file = new File(song.getPath());
-        String strRange = request.getHeader("Range");
-
-        int range = 0;
-        if (strRange != null) {
-            range = Integer.parseInt(strRange.replaceAll("\\D+", ""));
+        byte[] chunk=null;
+        try {
+            chunk = fileSystemStream.getBytes(song, range);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        byte[] bytes = Files.readAllBytes(file.toPath());
-
-        byte[] chunk;
-
-        response.reset();
-
-        response.setContentType("audio/mpeg");
-        response.addHeader("Content-Transfer-Encoding", "binary");
-
-        if (range + SIZE_8 >= bytes.length) {
-            logger.debug("bigger then length of array");
-            chunk = Arrays.copyOfRange(bytes, range, bytes.length);
-            response.addHeader("Content-Range", "bytes " + range + "-" + (bytes.length - 1) + "/" + file.length());
-            logger.debug("from: " + range + " to " + bytes.length);
-            response.setStatus(200);
-        } else {
-            chunk = Arrays.copyOfRange(bytes, range, range + SIZE_8);
-            response.addHeader("Content-Range", "bytes " + range + "-" + ((range + SIZE_8) - 1) + "/" + file.length());
-            logger.debug("from: " + range + " to " + ((range + SIZE_8) - 1));
-            response.setStatus(206);
-        }
-
-        response.addHeader("Accept-Range", "bytes");
-        response.addHeader("Content-Disposition", "inline");
-        response.addHeader("Content-Length", String.valueOf(chunk.length));
-        response.addHeader("Connection", "close");
-
-        InputStream byteInputStream = new ByteArrayInputStream(chunk);
-        IOUtils.copy(byteInputStream, response.getOutputStream());
-        response.flushBuffer();
-
+        return chunk;
 
     }
 
@@ -188,4 +160,60 @@ public class SongServiceImpl implements SongService {
     public Song findByNameAndYear(String name, Integer year) {
         return songRepository.findByNameAndYear(name, year);
     }
+
+    @Override
+    public Integer getStartPosition(String strRange) {
+
+        Integer range = 0;
+
+        if (strRange != null) {
+            try {
+            range = Integer.parseInt(strRange.replaceAll("\\D+", ""));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return  range;
+    }
 }
+
+
+//        File file = new File(song.getPath());
+//        String strRange = request.getHeader("Range");
+//
+//        int range = 0;
+//        if (strRange != null) {
+//            range = Integer.parseInt(strRange.replaceAll("\\D+", ""));
+//        }
+//
+//        byte[] bytes = Files.readAllBytes(file.toPath());
+//
+//        byte[] chunk;
+//
+//        response.reset();
+//
+//        response.setContentType("audio/mpeg");
+//        response.addHeader("Content-Transfer-Encoding", "binary");
+//
+//        if (range + SIZE_8 >= bytes.length) {
+//
+//            chunk = Arrays.copyOfRange(bytes, range, bytes.length);
+//            response.addHeader("Content-Range", "bytes " + range + "-" + (bytes.length - 1) + "/" + file.length());
+//            logger.debug("from: " + range + " to " + bytes.length);
+//            response.setStatus(200);
+//        } else {
+//            chunk = Arrays.copyOfRange(bytes, range, range + SIZE_8);
+//            response.addHeader("Content-Range", "bytes " + range + "-" + ((range + SIZE_8) - 1) + "/" + file.length());
+//            logger.debug("from: " + range + " to " + ((range + SIZE_8) - 1));
+//            response.setStatus(206);
+//        }
+//
+//        response.addHeader("Accept-Range", "bytes");
+//        response.addHeader("Content-Disposition", "inline");
+//        response.addHeader("Content-Length", String.valueOf(chunk.length));
+//        response.addHeader("Connection", "close");
+//
+//        InputStream byteInputStream = new ByteArrayInputStream(chunk);
+//        IOUtils.copy(byteInputStream, response.getOutputStream());
+//        response.flushBuffer();
+

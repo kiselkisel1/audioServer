@@ -2,9 +2,8 @@ package com.example.application.model;
 
 
 import com.example.application.deserializer.ArtistDeserializer;
-import com.example.application.exceptions.CustomException;
 import com.example.application.serializer.ArtistSerializer;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
@@ -12,15 +11,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Calendar;
-import java.util.Set;
 
 @JsonSerialize(using = ArtistSerializer.class)
 @JsonDeserialize(using = ArtistDeserializer.class)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
