@@ -12,8 +12,7 @@ public interface SongService {
      void delete(Song song);
     List<Song> filter(String name, int year, Integer[] artist, Integer[]genres);
 
-    byte[] getStream(Song song,int range);
-    Song findByNameAndYear(String name,Integer year);
+    byte[] getStream(Song song, int startPosition);
 
     Integer getStartPosition(String range);
 

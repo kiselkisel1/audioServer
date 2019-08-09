@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -20,45 +19,35 @@ import javax.validation.constraints.Size;
 public class Song {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotBlank(message = "Name is required")
-    @Size(min=5,max=200,message = "Name should contain from 5 to 200 symbols")
+    @Size(max = 200, message = "Name should contain not more than 200 symbols")
     private String name;
 
-     private Integer year;
+    private Integer year;
 
     private String comment;
 
-    @NotBlank
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "storage_id")
+    private Storage storage;
+
+    private Long size;
+
     private String path;
 
-    private Long file_length;
-
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-     @JoinColumn(name = "album_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "album_id")
     private Album album;
 
 
-    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year, String comment, String path, Album album) {
+    public Song(@NotBlank(message = "Name is required") @Size( max = 200, message =  "Name should contain not more than 200 symbols") String name, Integer year, Storage storage, Long size, String path, Album album) {
         this.name = name;
         this.year = year;
-        this.comment = comment;
-        this.path = path;
-        this.album = album;
-    }
-    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year , String path,Long file_length, Album album) {
-        this.name = name;
-        this.year = year;
-        this.path = path;
-        this.file_length=file_length;
-        this.album = album;
-    }
-
-    public Song(@NotBlank(message = "Name is required") @Size(min = 5, max = 200, message = "Name should contain from 5 to 200 symbols") String name, Integer year , String path, Album album) {
-        this.name = name;
-        this.year = year;
+        this.storage = storage;
+        this.size = size;
         this.path = path;
         this.album = album;
     }
